@@ -1,0 +1,18 @@
+{
+  "name": "quadtree",
+  "version": "1.0.0",
+  "main": "./lib/quadtree.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Srinjoy Ray",
+  "license": "MIT",
+  "description": "",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
