@@ -134,7 +134,7 @@ const sorted = quadtree.sortPointsByHaversineFormula(target, points);
 
 MIT
 
-## Contributing
+## Contributor
 
-Made by .
+Made with ❤️ by [Srinjoy Ray](https://github.com/srinjoyray).
 
