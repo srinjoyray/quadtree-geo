@@ -1,5 +1,5 @@
 {
-  "name": "quadtree",
+  "name": "quadtree-geo",
   "version": "1.0.0",
   "main": "./lib/quadtree.js",
   "scripts": {
