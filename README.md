@@ -1,4 +1,4 @@
-# Quadtree Geographic Encoding and Decoding
+# quadtree-geo
 
 A lightweight and efficient JavaScript library for geographic coordinate encoding using quadtree. This implementation provides methods for encoding/decoding coordinates, finding neighbors, calculating bounding boxes, and performing proximity-based searches.
 
