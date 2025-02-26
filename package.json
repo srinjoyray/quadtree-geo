@@ -11,5 +11,5 @@
   "devDependencies": {
     "jest": "^29.7.0"
   },
-  "git repository": "https://github.com/srinjoyray/Quadtree"
+  "git repository": "https://github.com/srinjoyray/quadtree-geo"
 }
