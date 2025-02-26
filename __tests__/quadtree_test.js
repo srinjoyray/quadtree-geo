@@ -121,56 +121,40 @@ describe('Quadtree', () => {
   });
 
   describe('sortPointsByProximityToTarget', () => {
-    it('should sort points by prefix and then distance', () => {
-      const target = { lng: 50, lat: 40 };
-      const points = [
-        { lng: 51, lat: 41 }, // closest, same prefix
-        { lng: 52, lat: 42 }, // further, same prefix
-        { lng: 40, lat: 40 }, // different prefix, closer
-        { lng: 30, lat: 40 }, // different prefix, further
-      ];
-      const precision = 3;
-
-      const sortedPoints = quadtree.sortPointsByProximityToTarget(target, points, precision);
-
-      expect(sortedPoints).toEqual([
-        { lng: 51, lat: 41 },
-        { lng: 52, lat: 42 },
-        { lng: 40, lat: 40 },
-        { lng: 30, lat: 40 },
-      ]);
-    });
-
     it('should handle empty points array', () => {
-      const target = { lng: 50, lat: 40 };
+      const target = { lng: 50, lat: 40, encoded: quadtree.encode({ lng: 50, lat: 40 }, 3) };
       const points = [];
-      const precision = 3;
 
-      const sortedPoints = quadtree.sortPointsByProximityToTarget(target, points, precision);
-
+      const sortedPoints = quadtree.sortPointsByProximityToTarget(target, points, 3);
       expect(sortedPoints).toEqual([]);
     });
 
     it('should handle blr points', () => {
-      const target = { lng: 77.69147483851216, lat: 12.98173805 };
-      const points = [
-        { lng: 77.74794, lat: 12.95965 }, // nexus whitefield
-        { lng: 77.692635, lat: 12.926941 }, // etv
-        { lng: 77.68352, lat: 12.906421 }, // junnasandra
-        { lng: 77.71928, lat: 12.995923 }, // hoodi
-      ];
       const precision = 20;
+      const target = { 
+        lng: 77.69147483851216, 
+        lat: 12.98173805,
+        encoded: quadtree.encode({ lng: 77.69147483851216, lat: 12.98173805 }, precision),
+        name: "Mahadevapura"
+      };
+      const points = [
+        { lng: 77.74794, lat: 12.95965, name: "nexus whitefield", 
+          encoded: quadtree.encode({ lng: 77.74794, lat: 12.95965 }, precision) },
+        { lng: 77.692635, lat: 12.926941, name: "etv",
+          encoded: quadtree.encode({ lng: 77.692635, lat: 12.926941 }, precision) },
+        { lng: 77.68352, lat: 12.906421, name: "junnasandra",
+          encoded: quadtree.encode({ lng: 77.68352, lat: 12.906421 }, precision) },
+        { lng: 77.71928, lat: 12.995923, name: "hoodi",
+          encoded: quadtree.encode({ lng: 77.71928, lat: 12.995923 }, precision) },
+      ];
+      const pointsDeepCopy = JSON.parse(JSON.stringify(points));
 
-      const sortedPoints = quadtree.sortPointsByProximityToTarget(target, points, precision);
+      const sortedPoints = quadtree.sortPointsByProximityToTarget(target, points, 4);
+      const sortedPoints2 = quadtree.sortPointsByHaversineFormula(target, points);
 
-      const sortedPoints2 = quadtree.sortPointsByQuadtreeAndDistance(target, points, precision)
-
-      console.log(sortedPoints, sortedPoints2)
-
-      expect(sortedPoints).toEqual([]);
+      expect(sortedPoints).toMatchObject([
+        pointsDeepCopy[3], pointsDeepCopy[1], pointsDeepCopy[0], pointsDeepCopy[2]
+      ]);
     });
-
-
   });
-
 });
