@@ -34,7 +34,6 @@ npm install quadtree-geo
 ### Basic Initialization
 
 ```javascript
-// Default bounds (-180, -90, 180, 90)
 const quadtree = new Quadtree();
 ```
 
