@@ -1,4 +1,4 @@
-# quadtree-geo
+# Quadtree Geographic Encoding and Decoding
 
 A lightweight and efficient JavaScript library for geographic coordinate encoding using quadtree. This implementation provides methods for encoding/decoding coordinates, finding neighbors, calculating bounding boxes, and performing proximity-based searches.
 
@@ -39,52 +39,49 @@ npm install quadtree-geo
 ```javascript
 // Default bounds (-180, -90, 180, 90)
 const quadtree = new Quadtree();
-
-// Custom bounds for India
-const indiaQuadtree = new Quadtree(68.1, 6.7, 97.4, 35.6);
 ```
 
 ### Encoding Coordinates
 
 ```javascript
-const coordinate = { lng: 77.5946, lat: 12.9716 }; // Bangalore
-const encoded = indiaQuadtree.encode(coordinate, 12);
-console.log(encoded); // Returns something like "143212314321"
+const coordinate = { lng: 77.5946, lat: 12.9716 };
+const encoded = quadtree.encode(coordinate, 12);
+console.log(encoded); // Returns "134134143212"
 ```
 
 ### Decoding Quadtree String
 
 ```javascript
-const decoded = indiaQuadtree.decode("143212314321");
+const decoded = quadtree.decode("134134143212");
 console.log(decoded);
 // Output:
 // {
-//     origin: { lng: 77.5946, lat: 12.9716 },
-//     error: { lng: 0.000244, lat: 0.000244 }
+//   origin: { lng: 77.5634765625, lat: 12.98583984375 },
+//   error: { lng: 0.0439453125, lat: 0.02197265625 }
 // }
 ```
 
 ### Finding Neighbors
 
 ```javascript
-const encoded = "143212314321";
-const east = indiaQuadtree.neighbor(encoded, 1, 0);   // East neighbor
-const north = indiaQuadtree.neighbor(encoded, 0, 1);  // North neighbor
-const west = indiaQuadtree.neighbor(encoded, -1, 0);  // West neighbor
-const south = indiaQuadtree.neighbor(encoded, 0, -1); // South neighbor
+const encoded = "134134143212";
+const east = quadtree.neighbor(encoded, 1, 0);   // East neighbor
+const north = quadtree.neighbor(encoded, 0, 1);  // North neighbor
+const west = quadtree.neighbor(encoded, -1, 0);  // West neighbor
+const south = quadtree.neighbor(encoded, 0, -1); // South neighbor
 ```
 
 ### Getting Bounding Box
 
 ```javascript
-const bounds = indiaQuadtree.boundingBox("143212314321");
+const bounds = quadtree.boundingBox("134134143212");
 console.log(bounds);
 // Output:
 // {
-//     minLng: 77.594356,
-//     minLat: 12.971356,
-//     maxLng: 77.594844,
-//     maxLat: 12.971844
+//   minLng: 77.51953125,
+//   minLat: 12.9638671875,
+//   maxLng: 77.607421875,
+//   maxLat: 13.0078125
 // }
 ```
 
@@ -93,8 +90,8 @@ console.log(bounds);
 ```javascript
 const bangalore = { lng: 77.5946, lat: 12.9716 };
 const delhi = { lng: 77.1025, lat: 28.7041 };
-const distance = indiaQuadtree.distance(bangalore, delhi);
-console.log(`Distance: ${Math.round(distance / 1000)} km`);
+const distance = quadtree.distance(bangalore, delhi);
+console.log(`Distance: ${Math.round(distance / 1000)} km`); // Distance: 1750 km
 ```
 
 ### Proximity-Based Sorting
@@ -103,20 +100,45 @@ console.log(`Distance: ${Math.round(distance / 1000)} km`);
 const target = {
     lng: 77.5946,
     lat: 12.9716,
-    encoded: indiaQuadtree.encode({ lng: 77.5946, lat: 12.9716 }, 12)
+    encoded: quadtree.encode({ lng: 77.5946, lat: 12.9716 }, 12)
 };
 
 const points = [
-    { lng: 77.1025, lat: 28.7041, encoded: indiaQuadtree.encode({ lng: 77.1025, lat: 28.7041 }, 12) }, // Delhi
-    { lng: 77.5946, lat: 12.9716, encoded: indiaQuadtree.encode({ lng: 77.5946, lat: 12.9716 }, 12) }, // Bangalore
-    { lng: 80.2707, lat: 13.0827, encoded: indiaQuadtree.encode({ lng: 80.2707, lat: 13.0827 }, 12) }, // Chennai
-    { lng: 73.8567, lat: 18.5204, encoded: indiaQuadtree.encode({ lng: 73.8567, lat: 18.5204 }, 12) }, // Pune
-    { lng: 72.8777, lat: 19.0760, encoded: indiaQuadtree.encode({ lng: 72.8777, lat: 19.0760 }, 12) }, // Mumbai
+    { lng: 77.1025, lat: 28.7041, encoded: quadtree.encode({ lng: 77.1025, lat: 28.7041 }, 12) }, // Delhi
+    { lng: 77.5946, lat: 12.9716, encoded: quadtree.encode({ lng: 77.5946, lat: 12.9716 }, 12) }, // Bangalore
+    { lng: 80.2707, lat: 13.0827, encoded: quadtree.encode({ lng: 80.2707, lat: 13.0827 }, 12) }, // Chennai
+    { lng: 73.8567, lat: 18.5204, encoded: quadtree.encode({ lng: 73.8567, lat: 18.5204 }, 12) }, // Pune
+    { lng: 72.8777, lat: 19.0760, encoded: quadtree.encode({ lng: 72.8777, lat: 19.0760 }, 12) }, // Mumbai
     // ... more points
 ];
 
 // Get 3 closest points
-const closest = indiaQuadtree.sortPointsByProximityToTarget(target, points, 3);
+const closest = quadtree.sortPointsByProximityToTarget(target, points, 3);
+
+// Output:
+// [
+//   {
+//     lng: 77.5946,
+//     lat: 12.9716,
+//     encoded: '134134143212',
+//     prefixMatch: 12,
+//     distance: 0
+//   },
+//   {
+//     lng: 80.2707,
+//     lat: 13.0827,
+//     encoded: '134143242331',
+//     prefixMatch: 4,
+//     distance: 290172.0249530612
+//   },
+//   {
+//     lng: 73.8567,
+//     lat: 18.5204,
+//     encoded: '134124234232',
+//     prefixMatch: 4,
+//     distance: 735226.9425849161
+//   }
+// ]
 ```
 
 ### Haversine Formula Based Sorting
@@ -129,7 +151,10 @@ const points = [
     // ... more points
 ];
 
-const sorted = indiaQuadtree.sortPointsByHaversineFormula(target, points);
+const sorted = quadtree.sortPointsByHaversineFormula(target, points);
+
+// Output:
+// [ { lng: 77.5946, lat: 12.9716 }, { lng: 77.1025, lat: 28.7041 } ]
 ```
 
 ## API Reference

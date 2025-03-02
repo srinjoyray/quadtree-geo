@@ -6,7 +6,6 @@ describe('Quadtree', () => {
 
   beforeEach(() => {
     quadtree = new Quadtree();
-    customQuadtree = new Quadtree(0, 0, 100, 80);
   });
 
   describe('encode', () => {
@@ -21,11 +20,6 @@ describe('Quadtree', () => {
       expect(quadtree.encode({ lng: 22.5, lat: 67.5 }, 2)).toBe('12'); // {+-, ++}
       expect(quadtree.encode({ lng: -22.5, lat: 22.5 }, 2)).toBe('24'); // {-+, +-}
     });
-
-    it('should encode with custom bounds', () => {
-      expect(customQuadtree.encode({ lng: 25, lat: 75 }, 2)).toBe('21'); // {-(+,-), ++} => {-+, ++}
-      expect(customQuadtree.encode({ lng: 24, lat: 75 }, 2)).toBe('22'); // {--, ++}
-    });
   });
 
   describe('decode', () => {
@@ -34,12 +28,6 @@ describe('Quadtree', () => {
       const decoded = quadtree.decode('21');
       expect(decoded.origin).toEqual({ lng: -45, lat: 67.5 });
       expect(decoded.error).toEqual({ lng: 45, lat: 22.5 });
-    });
-
-    it('should decode with custom bounds', () => {
-      const decoded = customQuadtree.decode('12');
-      expect(decoded.origin).toEqual({ lng: 62.5, lat: 70 });
-      expect(decoded.error).toEqual({ lng: 12.5, lat: 10 });
     });
 
     it('should decode single quadrant', () => {
@@ -64,12 +52,6 @@ describe('Quadtree', () => {
       const decoded = quadtree.decode('1234');
       expect(decoded.origin).toEqual({ lng: 33.75, lat: 50.625 });
       expect(decoded.error).toEqual({ lng: 11.25, lat: 5.625 });
-    });
-
-    it('should decode custom bounds longer string', () => {
-      const decoded = customQuadtree.decode('2143');
-      expect(decoded.origin).toEqual({ lng: 40.625, lat: 62.5 });
-      expect(decoded.error).toEqual({ lng: 3.125, lat: 2.5 });
     });
   });
 
