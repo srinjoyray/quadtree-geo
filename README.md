@@ -8,9 +8,6 @@ A lightweight and efficient JavaScript library for geographic coordinate encodin
 * **Geographic Encoding/Decoding:**
     * Transforms real-world coordinates into compact quadtree string codes.
     * Allows for easy conversion back from these codes to the original coordinates.
-* **Customizable Range Limits:**
-    * The constructor allows you to define custom longitude and latitude bounds. By setting smaller ranges, you can significantly reduce the area size, resulting in higher precision for your quadtree encoding.
-    * Example: `new Quadtree(72, 8, 88, 35);` for focusing on India.
 * **Precision Control:**
     * Adjust encoding precision based on your needs.
 * **Neighbor Finding:**
@@ -157,19 +154,39 @@ const sorted = quadtree.sortPointsByHaversineFormula(target, points);
 // [ { lng: 77.5946, lat: 12.9716 }, { lng: 77.1025, lat: 28.7041 } ]
 ```
 
-## API Reference
+## API
 
-### Constructor
-- `new Quadtree(minLng = -180, minLat = -90, maxLng = 180, maxLat = 90)`
+### `Quadtree`
 
-### Methods
-- `encode(coordinate, precision)`: Encodes a coordinate to a quadtree string
-- `decode(encoded)`: Decodes a quadtree string to coordinates with error range
-- `neighbor(encoded, east, north)`: Finds neighboring quadtree cells
-- `boundingBox(encoded)`: Calculates the bounding box of an encoded area
-- `distance(coord1, coord2)`: Calculates distance between two points in meters
-- `sortPointsByProximityToTarget(target, points, k)`: Sorts points by quadtree prefix match and distance
-- `sortPointsByHaversineFormula(target, points)`: Sorts points by distance only
+* **`constructor()`**: Constructs a new Quadtree instance.
+* **`encode(coordinate, precision)`**: Encodes a coordinate to a quadtree string.
+    * `coordinate`: An object with `lng` and `lat` properties.
+    * `precision`: The desired precision of the encoding.
+    * Returns: The quadtree encoded string.
+* **`decode(encoded)`**: Decodes a quadtree string to a coordinate and error range.
+    * `encoded`: The quadtree encoded string.
+    * Returns: An object with `origin` (coordinate) and `error` (range) properties.
+* **`neighbor(encoded, east, north)`**: Calculates the neighbor quadtree string.
+    * `encoded`: The quadtree encoded string.
+    * `east`: The east offset (-1, 0, 1).
+    * `north`: The north offset (-1, 0, 1).
+    * Returns: The neighbor quadtree encoded string.
+* **`boundingBox(encoded)`**: Calculates the bounding box of a quadtree encoded area.
+    * `encoded`: The quadtree encoded string.
+    * Returns: An object with `minLng`, `minLat`, `maxLng`, and `maxLat` properties.
+* **`distance(coord1, coord2)`**: Calculates the approximate distance between two coordinates in meters using the haversine formula.
+    * `coord1`: The first coordinate.
+    * `coord2`: The second coordinate.
+    * Returns: The approximate distance in meters.
+* **`sortPointsByProximityToTarget(target, points, k)`**: Sorts points by using a combination of quadtree prefix match and distance to a target coordinate using haversine formula.
+    * `target`: The target coordinate with its quadtree encoding (e.g., `{lng, lat, encoded}`).
+    * `points`: The list of points to sort, each with its quadtree encoding (e.g., `[{lng, lat, encoded}, ...]`).
+    * `k`: The number of closest points to return.
+    * Returns: The `k` closest points to the target, sorted by quadtree prefix match and distance.
+* **`sortPointsByHaversineFormula(target, points)`**: Sorts points by distance only, using the haversine formula.
+    * `target`: The target coordinate (e.g., `{lng, lat}`).
+    * `points`: The list of points to sort (e.g., `[{lng, lat}, ...]`).
+    * Returns: The sorted list of points.
 
 ## License
 

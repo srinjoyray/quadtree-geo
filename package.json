@@ -1,6 +1,6 @@
 {
   "name": "quadtree-geo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./lib/quadtree.js",
   "scripts": {
     "test": "jest"
